@@ -30,6 +30,16 @@ const (
 	FieldLastRunFailed = "last_run_failed"
 	// FieldLastResult holds the string denoting the last_result field in the database.
 	FieldLastResult = "last_result"
+	// FieldPackageID holds the string denoting the package_id field in the database.
+	FieldPackageID = "package_id"
+	// FieldPackageName holds the string denoting the package_name field in the database.
+	FieldPackageName = "package_name"
+	// FieldPackageBranch holds the string denoting the package_branch field in the database.
+	FieldPackageBranch = "package_branch"
+	// FieldPackageBrewType holds the string denoting the package_brew_type field in the database.
+	FieldPackageBrewType = "package_brew_type"
+	// FieldPackageVerified holds the string denoting the package_verified field in the database.
+	FieldPackageVerified = "package_verified"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -38,6 +48,8 @@ const (
 	EdgeTenant = "tenant"
 	// EdgeSite holds the string denoting the site edge name in mutations.
 	EdgeSite = "site"
+	// EdgeProfile holds the string denoting the profile edge name in mutations.
+	EdgeProfile = "profile"
 	// Table holds the table name of the scheduledevent in the database.
 	Table = "scheduled_events"
 	// TenantTable is the table that holds the tenant relation/edge.
@@ -54,6 +66,13 @@ const (
 	SiteInverseTable = "sites"
 	// SiteColumn is the table column denoting the site relation/edge.
 	SiteColumn = "site_scheduled_events"
+	// ProfileTable is the table that holds the profile relation/edge.
+	ProfileTable = "scheduled_events"
+	// ProfileInverseTable is the table name for the Profile entity.
+	// It exists in this package in order to avoid circular dependency with the "profile" package.
+	ProfileInverseTable = "profiles"
+	// ProfileColumn is the table column denoting the profile relation/edge.
+	ProfileColumn = "profile_scheduled_events"
 )
 
 // Columns holds all SQL columns for scheduledevent fields.
@@ -67,6 +86,11 @@ var Columns = []string{
 	FieldLastRun,
 	FieldLastRunFailed,
 	FieldLastResult,
+	FieldPackageID,
+	FieldPackageName,
+	FieldPackageBranch,
+	FieldPackageBrewType,
+	FieldPackageVerified,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -74,6 +98,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "scheduled_events"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"profile_scheduled_events",
 	"site_scheduled_events",
 	"tenant_scheduled_events",
 }
@@ -102,6 +127,8 @@ var (
 	DefaultEnabled bool
 	// DefaultLastRunFailed holds the default value on creation for the "last_run_failed" field.
 	DefaultLastRunFailed bool
+	// DefaultPackageVerified holds the default value on creation for the "package_verified" field.
+	DefaultPackageVerified bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt time.Time
 )
@@ -154,6 +181,31 @@ func ByLastResult(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastResult, opts...).ToFunc()
 }
 
+// ByPackageID orders the results by the package_id field.
+func ByPackageID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPackageID, opts...).ToFunc()
+}
+
+// ByPackageName orders the results by the package_name field.
+func ByPackageName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPackageName, opts...).ToFunc()
+}
+
+// ByPackageBranch orders the results by the package_branch field.
+func ByPackageBranch(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPackageBranch, opts...).ToFunc()
+}
+
+// ByPackageBrewType orders the results by the package_brew_type field.
+func ByPackageBrewType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPackageBrewType, opts...).ToFunc()
+}
+
+// ByPackageVerified orders the results by the package_verified field.
+func ByPackageVerified(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPackageVerified, opts...).ToFunc()
+}
+
 // ByCreatedAt orders the results by the created_at field.
 func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
@@ -177,6 +229,13 @@ func BySiteField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSiteStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByProfileField orders the results by profile field.
+func ByProfileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProfileStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newTenantStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -189,5 +248,12 @@ func newSiteStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SiteInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, SiteTable, SiteColumn),
+	)
+}
+func newProfileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProfileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ProfileTable, ProfileColumn),
 	)
 }

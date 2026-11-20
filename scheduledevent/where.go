@@ -95,6 +95,31 @@ func LastResult(v string) predicate.ScheduledEvent {
 	return predicate.ScheduledEvent(sql.FieldEQ(FieldLastResult, v))
 }
 
+// PackageID applies equality check predicate on the "package_id" field. It's identical to PackageIDEQ.
+func PackageID(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageID, v))
+}
+
+// PackageName applies equality check predicate on the "package_name" field. It's identical to PackageNameEQ.
+func PackageName(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageName, v))
+}
+
+// PackageBranch applies equality check predicate on the "package_branch" field. It's identical to PackageBranchEQ.
+func PackageBranch(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageBranch, v))
+}
+
+// PackageBrewType applies equality check predicate on the "package_brew_type" field. It's identical to PackageBrewTypeEQ.
+func PackageBrewType(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageBrewType, v))
+}
+
+// PackageVerified applies equality check predicate on the "package_verified" field. It's identical to PackageVerifiedEQ.
+func PackageVerified(v bool) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageVerified, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.ScheduledEvent {
 	return predicate.ScheduledEvent(sql.FieldEQ(FieldCreatedAt, v))
@@ -505,6 +530,316 @@ func LastResultContainsFold(v string) predicate.ScheduledEvent {
 	return predicate.ScheduledEvent(sql.FieldContainsFold(FieldLastResult, v))
 }
 
+// PackageIDEQ applies the EQ predicate on the "package_id" field.
+func PackageIDEQ(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageID, v))
+}
+
+// PackageIDNEQ applies the NEQ predicate on the "package_id" field.
+func PackageIDNEQ(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNEQ(FieldPackageID, v))
+}
+
+// PackageIDIn applies the In predicate on the "package_id" field.
+func PackageIDIn(vs ...string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldIn(FieldPackageID, vs...))
+}
+
+// PackageIDNotIn applies the NotIn predicate on the "package_id" field.
+func PackageIDNotIn(vs ...string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNotIn(FieldPackageID, vs...))
+}
+
+// PackageIDGT applies the GT predicate on the "package_id" field.
+func PackageIDGT(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldGT(FieldPackageID, v))
+}
+
+// PackageIDGTE applies the GTE predicate on the "package_id" field.
+func PackageIDGTE(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldGTE(FieldPackageID, v))
+}
+
+// PackageIDLT applies the LT predicate on the "package_id" field.
+func PackageIDLT(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldLT(FieldPackageID, v))
+}
+
+// PackageIDLTE applies the LTE predicate on the "package_id" field.
+func PackageIDLTE(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldLTE(FieldPackageID, v))
+}
+
+// PackageIDContains applies the Contains predicate on the "package_id" field.
+func PackageIDContains(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldContains(FieldPackageID, v))
+}
+
+// PackageIDHasPrefix applies the HasPrefix predicate on the "package_id" field.
+func PackageIDHasPrefix(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldHasPrefix(FieldPackageID, v))
+}
+
+// PackageIDHasSuffix applies the HasSuffix predicate on the "package_id" field.
+func PackageIDHasSuffix(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldHasSuffix(FieldPackageID, v))
+}
+
+// PackageIDIsNil applies the IsNil predicate on the "package_id" field.
+func PackageIDIsNil() predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldIsNull(FieldPackageID))
+}
+
+// PackageIDNotNil applies the NotNil predicate on the "package_id" field.
+func PackageIDNotNil() predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNotNull(FieldPackageID))
+}
+
+// PackageIDEqualFold applies the EqualFold predicate on the "package_id" field.
+func PackageIDEqualFold(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEqualFold(FieldPackageID, v))
+}
+
+// PackageIDContainsFold applies the ContainsFold predicate on the "package_id" field.
+func PackageIDContainsFold(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldContainsFold(FieldPackageID, v))
+}
+
+// PackageNameEQ applies the EQ predicate on the "package_name" field.
+func PackageNameEQ(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageName, v))
+}
+
+// PackageNameNEQ applies the NEQ predicate on the "package_name" field.
+func PackageNameNEQ(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNEQ(FieldPackageName, v))
+}
+
+// PackageNameIn applies the In predicate on the "package_name" field.
+func PackageNameIn(vs ...string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldIn(FieldPackageName, vs...))
+}
+
+// PackageNameNotIn applies the NotIn predicate on the "package_name" field.
+func PackageNameNotIn(vs ...string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNotIn(FieldPackageName, vs...))
+}
+
+// PackageNameGT applies the GT predicate on the "package_name" field.
+func PackageNameGT(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldGT(FieldPackageName, v))
+}
+
+// PackageNameGTE applies the GTE predicate on the "package_name" field.
+func PackageNameGTE(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldGTE(FieldPackageName, v))
+}
+
+// PackageNameLT applies the LT predicate on the "package_name" field.
+func PackageNameLT(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldLT(FieldPackageName, v))
+}
+
+// PackageNameLTE applies the LTE predicate on the "package_name" field.
+func PackageNameLTE(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldLTE(FieldPackageName, v))
+}
+
+// PackageNameContains applies the Contains predicate on the "package_name" field.
+func PackageNameContains(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldContains(FieldPackageName, v))
+}
+
+// PackageNameHasPrefix applies the HasPrefix predicate on the "package_name" field.
+func PackageNameHasPrefix(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldHasPrefix(FieldPackageName, v))
+}
+
+// PackageNameHasSuffix applies the HasSuffix predicate on the "package_name" field.
+func PackageNameHasSuffix(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldHasSuffix(FieldPackageName, v))
+}
+
+// PackageNameIsNil applies the IsNil predicate on the "package_name" field.
+func PackageNameIsNil() predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldIsNull(FieldPackageName))
+}
+
+// PackageNameNotNil applies the NotNil predicate on the "package_name" field.
+func PackageNameNotNil() predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNotNull(FieldPackageName))
+}
+
+// PackageNameEqualFold applies the EqualFold predicate on the "package_name" field.
+func PackageNameEqualFold(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEqualFold(FieldPackageName, v))
+}
+
+// PackageNameContainsFold applies the ContainsFold predicate on the "package_name" field.
+func PackageNameContainsFold(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldContainsFold(FieldPackageName, v))
+}
+
+// PackageBranchEQ applies the EQ predicate on the "package_branch" field.
+func PackageBranchEQ(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageBranch, v))
+}
+
+// PackageBranchNEQ applies the NEQ predicate on the "package_branch" field.
+func PackageBranchNEQ(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNEQ(FieldPackageBranch, v))
+}
+
+// PackageBranchIn applies the In predicate on the "package_branch" field.
+func PackageBranchIn(vs ...string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldIn(FieldPackageBranch, vs...))
+}
+
+// PackageBranchNotIn applies the NotIn predicate on the "package_branch" field.
+func PackageBranchNotIn(vs ...string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNotIn(FieldPackageBranch, vs...))
+}
+
+// PackageBranchGT applies the GT predicate on the "package_branch" field.
+func PackageBranchGT(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldGT(FieldPackageBranch, v))
+}
+
+// PackageBranchGTE applies the GTE predicate on the "package_branch" field.
+func PackageBranchGTE(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldGTE(FieldPackageBranch, v))
+}
+
+// PackageBranchLT applies the LT predicate on the "package_branch" field.
+func PackageBranchLT(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldLT(FieldPackageBranch, v))
+}
+
+// PackageBranchLTE applies the LTE predicate on the "package_branch" field.
+func PackageBranchLTE(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldLTE(FieldPackageBranch, v))
+}
+
+// PackageBranchContains applies the Contains predicate on the "package_branch" field.
+func PackageBranchContains(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldContains(FieldPackageBranch, v))
+}
+
+// PackageBranchHasPrefix applies the HasPrefix predicate on the "package_branch" field.
+func PackageBranchHasPrefix(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldHasPrefix(FieldPackageBranch, v))
+}
+
+// PackageBranchHasSuffix applies the HasSuffix predicate on the "package_branch" field.
+func PackageBranchHasSuffix(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldHasSuffix(FieldPackageBranch, v))
+}
+
+// PackageBranchIsNil applies the IsNil predicate on the "package_branch" field.
+func PackageBranchIsNil() predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldIsNull(FieldPackageBranch))
+}
+
+// PackageBranchNotNil applies the NotNil predicate on the "package_branch" field.
+func PackageBranchNotNil() predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNotNull(FieldPackageBranch))
+}
+
+// PackageBranchEqualFold applies the EqualFold predicate on the "package_branch" field.
+func PackageBranchEqualFold(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEqualFold(FieldPackageBranch, v))
+}
+
+// PackageBranchContainsFold applies the ContainsFold predicate on the "package_branch" field.
+func PackageBranchContainsFold(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldContainsFold(FieldPackageBranch, v))
+}
+
+// PackageBrewTypeEQ applies the EQ predicate on the "package_brew_type" field.
+func PackageBrewTypeEQ(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeNEQ applies the NEQ predicate on the "package_brew_type" field.
+func PackageBrewTypeNEQ(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNEQ(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeIn applies the In predicate on the "package_brew_type" field.
+func PackageBrewTypeIn(vs ...string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldIn(FieldPackageBrewType, vs...))
+}
+
+// PackageBrewTypeNotIn applies the NotIn predicate on the "package_brew_type" field.
+func PackageBrewTypeNotIn(vs ...string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNotIn(FieldPackageBrewType, vs...))
+}
+
+// PackageBrewTypeGT applies the GT predicate on the "package_brew_type" field.
+func PackageBrewTypeGT(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldGT(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeGTE applies the GTE predicate on the "package_brew_type" field.
+func PackageBrewTypeGTE(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldGTE(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeLT applies the LT predicate on the "package_brew_type" field.
+func PackageBrewTypeLT(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldLT(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeLTE applies the LTE predicate on the "package_brew_type" field.
+func PackageBrewTypeLTE(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldLTE(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeContains applies the Contains predicate on the "package_brew_type" field.
+func PackageBrewTypeContains(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldContains(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeHasPrefix applies the HasPrefix predicate on the "package_brew_type" field.
+func PackageBrewTypeHasPrefix(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldHasPrefix(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeHasSuffix applies the HasSuffix predicate on the "package_brew_type" field.
+func PackageBrewTypeHasSuffix(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldHasSuffix(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeIsNil applies the IsNil predicate on the "package_brew_type" field.
+func PackageBrewTypeIsNil() predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldIsNull(FieldPackageBrewType))
+}
+
+// PackageBrewTypeNotNil applies the NotNil predicate on the "package_brew_type" field.
+func PackageBrewTypeNotNil() predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNotNull(FieldPackageBrewType))
+}
+
+// PackageBrewTypeEqualFold applies the EqualFold predicate on the "package_brew_type" field.
+func PackageBrewTypeEqualFold(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEqualFold(FieldPackageBrewType, v))
+}
+
+// PackageBrewTypeContainsFold applies the ContainsFold predicate on the "package_brew_type" field.
+func PackageBrewTypeContainsFold(v string) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldContainsFold(FieldPackageBrewType, v))
+}
+
+// PackageVerifiedEQ applies the EQ predicate on the "package_verified" field.
+func PackageVerifiedEQ(v bool) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldEQ(FieldPackageVerified, v))
+}
+
+// PackageVerifiedNEQ applies the NEQ predicate on the "package_verified" field.
+func PackageVerifiedNEQ(v bool) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(sql.FieldNEQ(FieldPackageVerified, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ScheduledEvent {
 	return predicate.ScheduledEvent(sql.FieldEQ(FieldCreatedAt, v))
@@ -633,6 +968,29 @@ func HasSite() predicate.ScheduledEvent {
 func HasSiteWith(preds ...predicate.Site) predicate.ScheduledEvent {
 	return predicate.ScheduledEvent(func(s *sql.Selector) {
 		step := newSiteStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProfile applies the HasEdge predicate on the "profile" edge.
+func HasProfile() predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ProfileTable, ProfileColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProfileWith applies the HasEdge predicate on the "profile" edge with a given conditions (other predicates).
+func HasProfileWith(preds ...predicate.Profile) predicate.ScheduledEvent {
+	return predicate.ScheduledEvent(func(s *sql.Selector) {
+		step := newProfileStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

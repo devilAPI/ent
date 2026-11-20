@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/scheduledevent"
 	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tenant"
@@ -120,6 +121,76 @@ func (sec *ScheduledEventCreate) SetNillableLastResult(s *string) *ScheduledEven
 	return sec
 }
 
+// SetPackageID sets the "package_id" field.
+func (sec *ScheduledEventCreate) SetPackageID(s string) *ScheduledEventCreate {
+	sec.mutation.SetPackageID(s)
+	return sec
+}
+
+// SetNillablePackageID sets the "package_id" field if the given value is not nil.
+func (sec *ScheduledEventCreate) SetNillablePackageID(s *string) *ScheduledEventCreate {
+	if s != nil {
+		sec.SetPackageID(*s)
+	}
+	return sec
+}
+
+// SetPackageName sets the "package_name" field.
+func (sec *ScheduledEventCreate) SetPackageName(s string) *ScheduledEventCreate {
+	sec.mutation.SetPackageName(s)
+	return sec
+}
+
+// SetNillablePackageName sets the "package_name" field if the given value is not nil.
+func (sec *ScheduledEventCreate) SetNillablePackageName(s *string) *ScheduledEventCreate {
+	if s != nil {
+		sec.SetPackageName(*s)
+	}
+	return sec
+}
+
+// SetPackageBranch sets the "package_branch" field.
+func (sec *ScheduledEventCreate) SetPackageBranch(s string) *ScheduledEventCreate {
+	sec.mutation.SetPackageBranch(s)
+	return sec
+}
+
+// SetNillablePackageBranch sets the "package_branch" field if the given value is not nil.
+func (sec *ScheduledEventCreate) SetNillablePackageBranch(s *string) *ScheduledEventCreate {
+	if s != nil {
+		sec.SetPackageBranch(*s)
+	}
+	return sec
+}
+
+// SetPackageBrewType sets the "package_brew_type" field.
+func (sec *ScheduledEventCreate) SetPackageBrewType(s string) *ScheduledEventCreate {
+	sec.mutation.SetPackageBrewType(s)
+	return sec
+}
+
+// SetNillablePackageBrewType sets the "package_brew_type" field if the given value is not nil.
+func (sec *ScheduledEventCreate) SetNillablePackageBrewType(s *string) *ScheduledEventCreate {
+	if s != nil {
+		sec.SetPackageBrewType(*s)
+	}
+	return sec
+}
+
+// SetPackageVerified sets the "package_verified" field.
+func (sec *ScheduledEventCreate) SetPackageVerified(b bool) *ScheduledEventCreate {
+	sec.mutation.SetPackageVerified(b)
+	return sec
+}
+
+// SetNillablePackageVerified sets the "package_verified" field if the given value is not nil.
+func (sec *ScheduledEventCreate) SetNillablePackageVerified(b *bool) *ScheduledEventCreate {
+	if b != nil {
+		sec.SetPackageVerified(*b)
+	}
+	return sec
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (sec *ScheduledEventCreate) SetCreatedAt(t time.Time) *ScheduledEventCreate {
 	sec.mutation.SetCreatedAt(t)
@@ -178,6 +249,25 @@ func (sec *ScheduledEventCreate) SetSite(s *Site) *ScheduledEventCreate {
 	return sec.SetSiteID(s.ID)
 }
 
+// SetProfileID sets the "profile" edge to the Profile entity by ID.
+func (sec *ScheduledEventCreate) SetProfileID(id int) *ScheduledEventCreate {
+	sec.mutation.SetProfileID(id)
+	return sec
+}
+
+// SetNillableProfileID sets the "profile" edge to the Profile entity by ID if the given value is not nil.
+func (sec *ScheduledEventCreate) SetNillableProfileID(id *int) *ScheduledEventCreate {
+	if id != nil {
+		sec = sec.SetProfileID(*id)
+	}
+	return sec
+}
+
+// SetProfile sets the "profile" edge to the Profile entity.
+func (sec *ScheduledEventCreate) SetProfile(p *Profile) *ScheduledEventCreate {
+	return sec.SetProfileID(p.ID)
+}
+
 // Mutation returns the ScheduledEventMutation object of the builder.
 func (sec *ScheduledEventCreate) Mutation() *ScheduledEventMutation {
 	return sec.mutation
@@ -221,6 +311,10 @@ func (sec *ScheduledEventCreate) defaults() {
 		v := scheduledevent.DefaultLastRunFailed
 		sec.mutation.SetLastRunFailed(v)
 	}
+	if _, ok := sec.mutation.PackageVerified(); !ok {
+		v := scheduledevent.DefaultPackageVerified
+		sec.mutation.SetPackageVerified(v)
+	}
 	if _, ok := sec.mutation.CreatedAt(); !ok {
 		v := scheduledevent.DefaultCreatedAt
 		sec.mutation.SetCreatedAt(v)
@@ -250,6 +344,9 @@ func (sec *ScheduledEventCreate) check() error {
 	}
 	if _, ok := sec.mutation.LastRunFailed(); !ok {
 		return &ValidationError{Name: "last_run_failed", err: errors.New(`ent: missing required field "ScheduledEvent.last_run_failed"`)}
+	}
+	if _, ok := sec.mutation.PackageVerified(); !ok {
+		return &ValidationError{Name: "package_verified", err: errors.New(`ent: missing required field "ScheduledEvent.package_verified"`)}
 	}
 	if _, ok := sec.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ScheduledEvent.created_at"`)}
@@ -316,6 +413,26 @@ func (sec *ScheduledEventCreate) createSpec() (*ScheduledEvent, *sqlgraph.Create
 		_spec.SetField(scheduledevent.FieldLastResult, field.TypeString, value)
 		_node.LastResult = value
 	}
+	if value, ok := sec.mutation.PackageID(); ok {
+		_spec.SetField(scheduledevent.FieldPackageID, field.TypeString, value)
+		_node.PackageID = value
+	}
+	if value, ok := sec.mutation.PackageName(); ok {
+		_spec.SetField(scheduledevent.FieldPackageName, field.TypeString, value)
+		_node.PackageName = value
+	}
+	if value, ok := sec.mutation.PackageBranch(); ok {
+		_spec.SetField(scheduledevent.FieldPackageBranch, field.TypeString, value)
+		_node.PackageBranch = value
+	}
+	if value, ok := sec.mutation.PackageBrewType(); ok {
+		_spec.SetField(scheduledevent.FieldPackageBrewType, field.TypeString, value)
+		_node.PackageBrewType = value
+	}
+	if value, ok := sec.mutation.PackageVerified(); ok {
+		_spec.SetField(scheduledevent.FieldPackageVerified, field.TypeBool, value)
+		_node.PackageVerified = value
+	}
 	if value, ok := sec.mutation.CreatedAt(); ok {
 		_spec.SetField(scheduledevent.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -356,6 +473,23 @@ func (sec *ScheduledEventCreate) createSpec() (*ScheduledEvent, *sqlgraph.Create
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.site_scheduled_events = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sec.mutation.ProfileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledevent.ProfileTable,
+			Columns: []string{scheduledevent.ProfileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.profile_scheduled_events = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
@@ -527,6 +661,90 @@ func (u *ScheduledEventUpsert) UpdateLastResult() *ScheduledEventUpsert {
 // ClearLastResult clears the value of the "last_result" field.
 func (u *ScheduledEventUpsert) ClearLastResult() *ScheduledEventUpsert {
 	u.SetNull(scheduledevent.FieldLastResult)
+	return u
+}
+
+// SetPackageID sets the "package_id" field.
+func (u *ScheduledEventUpsert) SetPackageID(v string) *ScheduledEventUpsert {
+	u.Set(scheduledevent.FieldPackageID, v)
+	return u
+}
+
+// UpdatePackageID sets the "package_id" field to the value that was provided on create.
+func (u *ScheduledEventUpsert) UpdatePackageID() *ScheduledEventUpsert {
+	u.SetExcluded(scheduledevent.FieldPackageID)
+	return u
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (u *ScheduledEventUpsert) ClearPackageID() *ScheduledEventUpsert {
+	u.SetNull(scheduledevent.FieldPackageID)
+	return u
+}
+
+// SetPackageName sets the "package_name" field.
+func (u *ScheduledEventUpsert) SetPackageName(v string) *ScheduledEventUpsert {
+	u.Set(scheduledevent.FieldPackageName, v)
+	return u
+}
+
+// UpdatePackageName sets the "package_name" field to the value that was provided on create.
+func (u *ScheduledEventUpsert) UpdatePackageName() *ScheduledEventUpsert {
+	u.SetExcluded(scheduledevent.FieldPackageName)
+	return u
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (u *ScheduledEventUpsert) ClearPackageName() *ScheduledEventUpsert {
+	u.SetNull(scheduledevent.FieldPackageName)
+	return u
+}
+
+// SetPackageBranch sets the "package_branch" field.
+func (u *ScheduledEventUpsert) SetPackageBranch(v string) *ScheduledEventUpsert {
+	u.Set(scheduledevent.FieldPackageBranch, v)
+	return u
+}
+
+// UpdatePackageBranch sets the "package_branch" field to the value that was provided on create.
+func (u *ScheduledEventUpsert) UpdatePackageBranch() *ScheduledEventUpsert {
+	u.SetExcluded(scheduledevent.FieldPackageBranch)
+	return u
+}
+
+// ClearPackageBranch clears the value of the "package_branch" field.
+func (u *ScheduledEventUpsert) ClearPackageBranch() *ScheduledEventUpsert {
+	u.SetNull(scheduledevent.FieldPackageBranch)
+	return u
+}
+
+// SetPackageBrewType sets the "package_brew_type" field.
+func (u *ScheduledEventUpsert) SetPackageBrewType(v string) *ScheduledEventUpsert {
+	u.Set(scheduledevent.FieldPackageBrewType, v)
+	return u
+}
+
+// UpdatePackageBrewType sets the "package_brew_type" field to the value that was provided on create.
+func (u *ScheduledEventUpsert) UpdatePackageBrewType() *ScheduledEventUpsert {
+	u.SetExcluded(scheduledevent.FieldPackageBrewType)
+	return u
+}
+
+// ClearPackageBrewType clears the value of the "package_brew_type" field.
+func (u *ScheduledEventUpsert) ClearPackageBrewType() *ScheduledEventUpsert {
+	u.SetNull(scheduledevent.FieldPackageBrewType)
+	return u
+}
+
+// SetPackageVerified sets the "package_verified" field.
+func (u *ScheduledEventUpsert) SetPackageVerified(v bool) *ScheduledEventUpsert {
+	u.Set(scheduledevent.FieldPackageVerified, v)
+	return u
+}
+
+// UpdatePackageVerified sets the "package_verified" field to the value that was provided on create.
+func (u *ScheduledEventUpsert) UpdatePackageVerified() *ScheduledEventUpsert {
+	u.SetExcluded(scheduledevent.FieldPackageVerified)
 	return u
 }
 
@@ -737,6 +955,104 @@ func (u *ScheduledEventUpsertOne) UpdateLastResult() *ScheduledEventUpsertOne {
 func (u *ScheduledEventUpsertOne) ClearLastResult() *ScheduledEventUpsertOne {
 	return u.Update(func(s *ScheduledEventUpsert) {
 		s.ClearLastResult()
+	})
+}
+
+// SetPackageID sets the "package_id" field.
+func (u *ScheduledEventUpsertOne) SetPackageID(v string) *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageID(v)
+	})
+}
+
+// UpdatePackageID sets the "package_id" field to the value that was provided on create.
+func (u *ScheduledEventUpsertOne) UpdatePackageID() *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageID()
+	})
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (u *ScheduledEventUpsertOne) ClearPackageID() *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.ClearPackageID()
+	})
+}
+
+// SetPackageName sets the "package_name" field.
+func (u *ScheduledEventUpsertOne) SetPackageName(v string) *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageName(v)
+	})
+}
+
+// UpdatePackageName sets the "package_name" field to the value that was provided on create.
+func (u *ScheduledEventUpsertOne) UpdatePackageName() *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageName()
+	})
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (u *ScheduledEventUpsertOne) ClearPackageName() *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.ClearPackageName()
+	})
+}
+
+// SetPackageBranch sets the "package_branch" field.
+func (u *ScheduledEventUpsertOne) SetPackageBranch(v string) *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageBranch(v)
+	})
+}
+
+// UpdatePackageBranch sets the "package_branch" field to the value that was provided on create.
+func (u *ScheduledEventUpsertOne) UpdatePackageBranch() *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageBranch()
+	})
+}
+
+// ClearPackageBranch clears the value of the "package_branch" field.
+func (u *ScheduledEventUpsertOne) ClearPackageBranch() *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.ClearPackageBranch()
+	})
+}
+
+// SetPackageBrewType sets the "package_brew_type" field.
+func (u *ScheduledEventUpsertOne) SetPackageBrewType(v string) *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageBrewType(v)
+	})
+}
+
+// UpdatePackageBrewType sets the "package_brew_type" field to the value that was provided on create.
+func (u *ScheduledEventUpsertOne) UpdatePackageBrewType() *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageBrewType()
+	})
+}
+
+// ClearPackageBrewType clears the value of the "package_brew_type" field.
+func (u *ScheduledEventUpsertOne) ClearPackageBrewType() *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.ClearPackageBrewType()
+	})
+}
+
+// SetPackageVerified sets the "package_verified" field.
+func (u *ScheduledEventUpsertOne) SetPackageVerified(v bool) *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageVerified(v)
+	})
+}
+
+// UpdatePackageVerified sets the "package_verified" field to the value that was provided on create.
+func (u *ScheduledEventUpsertOne) UpdatePackageVerified() *ScheduledEventUpsertOne {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageVerified()
 	})
 }
 
@@ -1116,6 +1432,104 @@ func (u *ScheduledEventUpsertBulk) UpdateLastResult() *ScheduledEventUpsertBulk 
 func (u *ScheduledEventUpsertBulk) ClearLastResult() *ScheduledEventUpsertBulk {
 	return u.Update(func(s *ScheduledEventUpsert) {
 		s.ClearLastResult()
+	})
+}
+
+// SetPackageID sets the "package_id" field.
+func (u *ScheduledEventUpsertBulk) SetPackageID(v string) *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageID(v)
+	})
+}
+
+// UpdatePackageID sets the "package_id" field to the value that was provided on create.
+func (u *ScheduledEventUpsertBulk) UpdatePackageID() *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageID()
+	})
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (u *ScheduledEventUpsertBulk) ClearPackageID() *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.ClearPackageID()
+	})
+}
+
+// SetPackageName sets the "package_name" field.
+func (u *ScheduledEventUpsertBulk) SetPackageName(v string) *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageName(v)
+	})
+}
+
+// UpdatePackageName sets the "package_name" field to the value that was provided on create.
+func (u *ScheduledEventUpsertBulk) UpdatePackageName() *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageName()
+	})
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (u *ScheduledEventUpsertBulk) ClearPackageName() *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.ClearPackageName()
+	})
+}
+
+// SetPackageBranch sets the "package_branch" field.
+func (u *ScheduledEventUpsertBulk) SetPackageBranch(v string) *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageBranch(v)
+	})
+}
+
+// UpdatePackageBranch sets the "package_branch" field to the value that was provided on create.
+func (u *ScheduledEventUpsertBulk) UpdatePackageBranch() *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageBranch()
+	})
+}
+
+// ClearPackageBranch clears the value of the "package_branch" field.
+func (u *ScheduledEventUpsertBulk) ClearPackageBranch() *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.ClearPackageBranch()
+	})
+}
+
+// SetPackageBrewType sets the "package_brew_type" field.
+func (u *ScheduledEventUpsertBulk) SetPackageBrewType(v string) *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageBrewType(v)
+	})
+}
+
+// UpdatePackageBrewType sets the "package_brew_type" field to the value that was provided on create.
+func (u *ScheduledEventUpsertBulk) UpdatePackageBrewType() *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageBrewType()
+	})
+}
+
+// ClearPackageBrewType clears the value of the "package_brew_type" field.
+func (u *ScheduledEventUpsertBulk) ClearPackageBrewType() *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.ClearPackageBrewType()
+	})
+}
+
+// SetPackageVerified sets the "package_verified" field.
+func (u *ScheduledEventUpsertBulk) SetPackageVerified(v bool) *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.SetPackageVerified(v)
+	})
+}
+
+// UpdatePackageVerified sets the "package_verified" field to the value that was provided on create.
+func (u *ScheduledEventUpsertBulk) UpdatePackageVerified() *ScheduledEventUpsertBulk {
+	return u.Update(func(s *ScheduledEventUpsert) {
+		s.UpdatePackageVerified()
 	})
 }
 

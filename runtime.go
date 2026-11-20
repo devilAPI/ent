@@ -385,8 +385,12 @@ func init() {
 	scheduledeventDescLastRunFailed := scheduledeventFields[6].Descriptor()
 	// scheduledevent.DefaultLastRunFailed holds the default value on creation for the last_run_failed field.
 	scheduledevent.DefaultLastRunFailed = scheduledeventDescLastRunFailed.Default.(bool)
+	// scheduledeventDescPackageVerified is the schema descriptor for package_verified field.
+	scheduledeventDescPackageVerified := scheduledeventFields[12].Descriptor()
+	// scheduledevent.DefaultPackageVerified holds the default value on creation for the package_verified field.
+	scheduledevent.DefaultPackageVerified = scheduledeventDescPackageVerified.Default.(bool)
 	// scheduledeventDescCreatedAt is the schema descriptor for created_at field.
-	scheduledeventDescCreatedAt := scheduledeventFields[8].Descriptor()
+	scheduledeventDescCreatedAt := scheduledeventFields[13].Descriptor()
 	// scheduledevent.DefaultCreatedAt holds the default value on creation for the created_at field.
 	scheduledevent.DefaultCreatedAt = scheduledeventDescCreatedAt.Default.(time.Time)
 	sessionsFields := schema.Sessions{}.Fields()

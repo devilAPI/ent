@@ -617,8 +617,14 @@ var (
 		{Name: "last_run", Type: field.TypeTime, Nullable: true},
 		{Name: "last_run_failed", Type: field.TypeBool, Default: false},
 		{Name: "last_result", Type: field.TypeString, Nullable: true},
+		{Name: "package_id", Type: field.TypeString, Nullable: true},
+		{Name: "package_name", Type: field.TypeString, Nullable: true},
+		{Name: "package_branch", Type: field.TypeString, Nullable: true},
+		{Name: "package_brew_type", Type: field.TypeString, Nullable: true},
+		{Name: "package_verified", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "profile_scheduled_events", Type: field.TypeInt, Nullable: true},
 		{Name: "site_scheduled_events", Type: field.TypeInt, Nullable: true},
 		{Name: "tenant_scheduled_events", Type: field.TypeInt},
 	}
@@ -629,14 +635,20 @@ var (
 		PrimaryKey: []*schema.Column{ScheduledEventsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
+				Symbol:     "scheduled_events_profiles_scheduled_events",
+				Columns:    []*schema.Column{ScheduledEventsColumns[16]},
+				RefColumns: []*schema.Column{ProfilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
 				Symbol:     "scheduled_events_sites_scheduled_events",
-				Columns:    []*schema.Column{ScheduledEventsColumns[11]},
+				Columns:    []*schema.Column{ScheduledEventsColumns[17]},
 				RefColumns: []*schema.Column{SitesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
 				Symbol:     "scheduled_events_tenants_scheduled_events",
-				Columns:    []*schema.Column{ScheduledEventsColumns[12]},
+				Columns:    []*schema.Column{ScheduledEventsColumns[18]},
 				RefColumns: []*schema.Column{TenantsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -1354,8 +1366,9 @@ func init() {
 	ProfileIssuesTable.ForeignKeys[0].RefTable = ProfilesTable
 	ProfileIssuesTable.ForeignKeys[1].RefTable = AgentsTable
 	RecoveryCodesTable.ForeignKeys[0].RefTable = UsersTable
-	ScheduledEventsTable.ForeignKeys[0].RefTable = SitesTable
-	ScheduledEventsTable.ForeignKeys[1].RefTable = TenantsTable
+	ScheduledEventsTable.ForeignKeys[0].RefTable = ProfilesTable
+	ScheduledEventsTable.ForeignKeys[1].RefTable = SitesTable
+	ScheduledEventsTable.ForeignKeys[2].RefTable = TenantsTable
 	SessionsTable.ForeignKeys[0].RefTable = UsersTable
 	SettingsTable.ForeignKeys[0].RefTable = TagsTable
 	SettingsTable.ForeignKeys[1].RefTable = TenantsTable

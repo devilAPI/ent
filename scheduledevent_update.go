@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/open-uem/ent/predicate"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/scheduledevent"
 	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tenant"
@@ -167,6 +168,100 @@ func (seu *ScheduledEventUpdate) ClearLastResult() *ScheduledEventUpdate {
 	return seu
 }
 
+// SetPackageID sets the "package_id" field.
+func (seu *ScheduledEventUpdate) SetPackageID(s string) *ScheduledEventUpdate {
+	seu.mutation.SetPackageID(s)
+	return seu
+}
+
+// SetNillablePackageID sets the "package_id" field if the given value is not nil.
+func (seu *ScheduledEventUpdate) SetNillablePackageID(s *string) *ScheduledEventUpdate {
+	if s != nil {
+		seu.SetPackageID(*s)
+	}
+	return seu
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (seu *ScheduledEventUpdate) ClearPackageID() *ScheduledEventUpdate {
+	seu.mutation.ClearPackageID()
+	return seu
+}
+
+// SetPackageName sets the "package_name" field.
+func (seu *ScheduledEventUpdate) SetPackageName(s string) *ScheduledEventUpdate {
+	seu.mutation.SetPackageName(s)
+	return seu
+}
+
+// SetNillablePackageName sets the "package_name" field if the given value is not nil.
+func (seu *ScheduledEventUpdate) SetNillablePackageName(s *string) *ScheduledEventUpdate {
+	if s != nil {
+		seu.SetPackageName(*s)
+	}
+	return seu
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (seu *ScheduledEventUpdate) ClearPackageName() *ScheduledEventUpdate {
+	seu.mutation.ClearPackageName()
+	return seu
+}
+
+// SetPackageBranch sets the "package_branch" field.
+func (seu *ScheduledEventUpdate) SetPackageBranch(s string) *ScheduledEventUpdate {
+	seu.mutation.SetPackageBranch(s)
+	return seu
+}
+
+// SetNillablePackageBranch sets the "package_branch" field if the given value is not nil.
+func (seu *ScheduledEventUpdate) SetNillablePackageBranch(s *string) *ScheduledEventUpdate {
+	if s != nil {
+		seu.SetPackageBranch(*s)
+	}
+	return seu
+}
+
+// ClearPackageBranch clears the value of the "package_branch" field.
+func (seu *ScheduledEventUpdate) ClearPackageBranch() *ScheduledEventUpdate {
+	seu.mutation.ClearPackageBranch()
+	return seu
+}
+
+// SetPackageBrewType sets the "package_brew_type" field.
+func (seu *ScheduledEventUpdate) SetPackageBrewType(s string) *ScheduledEventUpdate {
+	seu.mutation.SetPackageBrewType(s)
+	return seu
+}
+
+// SetNillablePackageBrewType sets the "package_brew_type" field if the given value is not nil.
+func (seu *ScheduledEventUpdate) SetNillablePackageBrewType(s *string) *ScheduledEventUpdate {
+	if s != nil {
+		seu.SetPackageBrewType(*s)
+	}
+	return seu
+}
+
+// ClearPackageBrewType clears the value of the "package_brew_type" field.
+func (seu *ScheduledEventUpdate) ClearPackageBrewType() *ScheduledEventUpdate {
+	seu.mutation.ClearPackageBrewType()
+	return seu
+}
+
+// SetPackageVerified sets the "package_verified" field.
+func (seu *ScheduledEventUpdate) SetPackageVerified(b bool) *ScheduledEventUpdate {
+	seu.mutation.SetPackageVerified(b)
+	return seu
+}
+
+// SetNillablePackageVerified sets the "package_verified" field if the given value is not nil.
+func (seu *ScheduledEventUpdate) SetNillablePackageVerified(b *bool) *ScheduledEventUpdate {
+	if b != nil {
+		seu.SetPackageVerified(*b)
+	}
+	return seu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (seu *ScheduledEventUpdate) SetCreatedAt(t time.Time) *ScheduledEventUpdate {
 	seu.mutation.SetCreatedAt(t)
@@ -231,6 +326,25 @@ func (seu *ScheduledEventUpdate) SetSite(s *Site) *ScheduledEventUpdate {
 	return seu.SetSiteID(s.ID)
 }
 
+// SetProfileID sets the "profile" edge to the Profile entity by ID.
+func (seu *ScheduledEventUpdate) SetProfileID(id int) *ScheduledEventUpdate {
+	seu.mutation.SetProfileID(id)
+	return seu
+}
+
+// SetNillableProfileID sets the "profile" edge to the Profile entity by ID if the given value is not nil.
+func (seu *ScheduledEventUpdate) SetNillableProfileID(id *int) *ScheduledEventUpdate {
+	if id != nil {
+		seu = seu.SetProfileID(*id)
+	}
+	return seu
+}
+
+// SetProfile sets the "profile" edge to the Profile entity.
+func (seu *ScheduledEventUpdate) SetProfile(p *Profile) *ScheduledEventUpdate {
+	return seu.SetProfileID(p.ID)
+}
+
 // Mutation returns the ScheduledEventMutation object of the builder.
 func (seu *ScheduledEventUpdate) Mutation() *ScheduledEventMutation {
 	return seu.mutation
@@ -245,6 +359,12 @@ func (seu *ScheduledEventUpdate) ClearTenant() *ScheduledEventUpdate {
 // ClearSite clears the "site" edge to the Site entity.
 func (seu *ScheduledEventUpdate) ClearSite() *ScheduledEventUpdate {
 	seu.mutation.ClearSite()
+	return seu
+}
+
+// ClearProfile clears the "profile" edge to the Profile entity.
+func (seu *ScheduledEventUpdate) ClearProfile() *ScheduledEventUpdate {
+	seu.mutation.ClearProfile()
 	return seu
 }
 
@@ -347,6 +467,33 @@ func (seu *ScheduledEventUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if seu.mutation.LastResultCleared() {
 		_spec.ClearField(scheduledevent.FieldLastResult, field.TypeString)
 	}
+	if value, ok := seu.mutation.PackageID(); ok {
+		_spec.SetField(scheduledevent.FieldPackageID, field.TypeString, value)
+	}
+	if seu.mutation.PackageIDCleared() {
+		_spec.ClearField(scheduledevent.FieldPackageID, field.TypeString)
+	}
+	if value, ok := seu.mutation.PackageName(); ok {
+		_spec.SetField(scheduledevent.FieldPackageName, field.TypeString, value)
+	}
+	if seu.mutation.PackageNameCleared() {
+		_spec.ClearField(scheduledevent.FieldPackageName, field.TypeString)
+	}
+	if value, ok := seu.mutation.PackageBranch(); ok {
+		_spec.SetField(scheduledevent.FieldPackageBranch, field.TypeString, value)
+	}
+	if seu.mutation.PackageBranchCleared() {
+		_spec.ClearField(scheduledevent.FieldPackageBranch, field.TypeString)
+	}
+	if value, ok := seu.mutation.PackageBrewType(); ok {
+		_spec.SetField(scheduledevent.FieldPackageBrewType, field.TypeString, value)
+	}
+	if seu.mutation.PackageBrewTypeCleared() {
+		_spec.ClearField(scheduledevent.FieldPackageBrewType, field.TypeString)
+	}
+	if value, ok := seu.mutation.PackageVerified(); ok {
+		_spec.SetField(scheduledevent.FieldPackageVerified, field.TypeBool, value)
+	}
 	if value, ok := seu.mutation.CreatedAt(); ok {
 		_spec.SetField(scheduledevent.FieldCreatedAt, field.TypeTime, value)
 	}
@@ -407,6 +554,35 @@ func (seu *ScheduledEventUpdate) sqlSave(ctx context.Context) (n int, err error)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if seu.mutation.ProfileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledevent.ProfileTable,
+			Columns: []string{scheduledevent.ProfileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := seu.mutation.ProfileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledevent.ProfileTable,
+			Columns: []string{scheduledevent.ProfileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -572,6 +748,100 @@ func (seuo *ScheduledEventUpdateOne) ClearLastResult() *ScheduledEventUpdateOne 
 	return seuo
 }
 
+// SetPackageID sets the "package_id" field.
+func (seuo *ScheduledEventUpdateOne) SetPackageID(s string) *ScheduledEventUpdateOne {
+	seuo.mutation.SetPackageID(s)
+	return seuo
+}
+
+// SetNillablePackageID sets the "package_id" field if the given value is not nil.
+func (seuo *ScheduledEventUpdateOne) SetNillablePackageID(s *string) *ScheduledEventUpdateOne {
+	if s != nil {
+		seuo.SetPackageID(*s)
+	}
+	return seuo
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (seuo *ScheduledEventUpdateOne) ClearPackageID() *ScheduledEventUpdateOne {
+	seuo.mutation.ClearPackageID()
+	return seuo
+}
+
+// SetPackageName sets the "package_name" field.
+func (seuo *ScheduledEventUpdateOne) SetPackageName(s string) *ScheduledEventUpdateOne {
+	seuo.mutation.SetPackageName(s)
+	return seuo
+}
+
+// SetNillablePackageName sets the "package_name" field if the given value is not nil.
+func (seuo *ScheduledEventUpdateOne) SetNillablePackageName(s *string) *ScheduledEventUpdateOne {
+	if s != nil {
+		seuo.SetPackageName(*s)
+	}
+	return seuo
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (seuo *ScheduledEventUpdateOne) ClearPackageName() *ScheduledEventUpdateOne {
+	seuo.mutation.ClearPackageName()
+	return seuo
+}
+
+// SetPackageBranch sets the "package_branch" field.
+func (seuo *ScheduledEventUpdateOne) SetPackageBranch(s string) *ScheduledEventUpdateOne {
+	seuo.mutation.SetPackageBranch(s)
+	return seuo
+}
+
+// SetNillablePackageBranch sets the "package_branch" field if the given value is not nil.
+func (seuo *ScheduledEventUpdateOne) SetNillablePackageBranch(s *string) *ScheduledEventUpdateOne {
+	if s != nil {
+		seuo.SetPackageBranch(*s)
+	}
+	return seuo
+}
+
+// ClearPackageBranch clears the value of the "package_branch" field.
+func (seuo *ScheduledEventUpdateOne) ClearPackageBranch() *ScheduledEventUpdateOne {
+	seuo.mutation.ClearPackageBranch()
+	return seuo
+}
+
+// SetPackageBrewType sets the "package_brew_type" field.
+func (seuo *ScheduledEventUpdateOne) SetPackageBrewType(s string) *ScheduledEventUpdateOne {
+	seuo.mutation.SetPackageBrewType(s)
+	return seuo
+}
+
+// SetNillablePackageBrewType sets the "package_brew_type" field if the given value is not nil.
+func (seuo *ScheduledEventUpdateOne) SetNillablePackageBrewType(s *string) *ScheduledEventUpdateOne {
+	if s != nil {
+		seuo.SetPackageBrewType(*s)
+	}
+	return seuo
+}
+
+// ClearPackageBrewType clears the value of the "package_brew_type" field.
+func (seuo *ScheduledEventUpdateOne) ClearPackageBrewType() *ScheduledEventUpdateOne {
+	seuo.mutation.ClearPackageBrewType()
+	return seuo
+}
+
+// SetPackageVerified sets the "package_verified" field.
+func (seuo *ScheduledEventUpdateOne) SetPackageVerified(b bool) *ScheduledEventUpdateOne {
+	seuo.mutation.SetPackageVerified(b)
+	return seuo
+}
+
+// SetNillablePackageVerified sets the "package_verified" field if the given value is not nil.
+func (seuo *ScheduledEventUpdateOne) SetNillablePackageVerified(b *bool) *ScheduledEventUpdateOne {
+	if b != nil {
+		seuo.SetPackageVerified(*b)
+	}
+	return seuo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (seuo *ScheduledEventUpdateOne) SetCreatedAt(t time.Time) *ScheduledEventUpdateOne {
 	seuo.mutation.SetCreatedAt(t)
@@ -636,6 +906,25 @@ func (seuo *ScheduledEventUpdateOne) SetSite(s *Site) *ScheduledEventUpdateOne {
 	return seuo.SetSiteID(s.ID)
 }
 
+// SetProfileID sets the "profile" edge to the Profile entity by ID.
+func (seuo *ScheduledEventUpdateOne) SetProfileID(id int) *ScheduledEventUpdateOne {
+	seuo.mutation.SetProfileID(id)
+	return seuo
+}
+
+// SetNillableProfileID sets the "profile" edge to the Profile entity by ID if the given value is not nil.
+func (seuo *ScheduledEventUpdateOne) SetNillableProfileID(id *int) *ScheduledEventUpdateOne {
+	if id != nil {
+		seuo = seuo.SetProfileID(*id)
+	}
+	return seuo
+}
+
+// SetProfile sets the "profile" edge to the Profile entity.
+func (seuo *ScheduledEventUpdateOne) SetProfile(p *Profile) *ScheduledEventUpdateOne {
+	return seuo.SetProfileID(p.ID)
+}
+
 // Mutation returns the ScheduledEventMutation object of the builder.
 func (seuo *ScheduledEventUpdateOne) Mutation() *ScheduledEventMutation {
 	return seuo.mutation
@@ -650,6 +939,12 @@ func (seuo *ScheduledEventUpdateOne) ClearTenant() *ScheduledEventUpdateOne {
 // ClearSite clears the "site" edge to the Site entity.
 func (seuo *ScheduledEventUpdateOne) ClearSite() *ScheduledEventUpdateOne {
 	seuo.mutation.ClearSite()
+	return seuo
+}
+
+// ClearProfile clears the "profile" edge to the Profile entity.
+func (seuo *ScheduledEventUpdateOne) ClearProfile() *ScheduledEventUpdateOne {
+	seuo.mutation.ClearProfile()
 	return seuo
 }
 
@@ -782,6 +1077,33 @@ func (seuo *ScheduledEventUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 	if seuo.mutation.LastResultCleared() {
 		_spec.ClearField(scheduledevent.FieldLastResult, field.TypeString)
 	}
+	if value, ok := seuo.mutation.PackageID(); ok {
+		_spec.SetField(scheduledevent.FieldPackageID, field.TypeString, value)
+	}
+	if seuo.mutation.PackageIDCleared() {
+		_spec.ClearField(scheduledevent.FieldPackageID, field.TypeString)
+	}
+	if value, ok := seuo.mutation.PackageName(); ok {
+		_spec.SetField(scheduledevent.FieldPackageName, field.TypeString, value)
+	}
+	if seuo.mutation.PackageNameCleared() {
+		_spec.ClearField(scheduledevent.FieldPackageName, field.TypeString)
+	}
+	if value, ok := seuo.mutation.PackageBranch(); ok {
+		_spec.SetField(scheduledevent.FieldPackageBranch, field.TypeString, value)
+	}
+	if seuo.mutation.PackageBranchCleared() {
+		_spec.ClearField(scheduledevent.FieldPackageBranch, field.TypeString)
+	}
+	if value, ok := seuo.mutation.PackageBrewType(); ok {
+		_spec.SetField(scheduledevent.FieldPackageBrewType, field.TypeString, value)
+	}
+	if seuo.mutation.PackageBrewTypeCleared() {
+		_spec.ClearField(scheduledevent.FieldPackageBrewType, field.TypeString)
+	}
+	if value, ok := seuo.mutation.PackageVerified(); ok {
+		_spec.SetField(scheduledevent.FieldPackageVerified, field.TypeBool, value)
+	}
 	if value, ok := seuo.mutation.CreatedAt(); ok {
 		_spec.SetField(scheduledevent.FieldCreatedAt, field.TypeTime, value)
 	}
@@ -842,6 +1164,35 @@ func (seuo *ScheduledEventUpdateOne) sqlSave(ctx context.Context) (_node *Schedu
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(site.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if seuo.mutation.ProfileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledevent.ProfileTable,
+			Columns: []string{scheduledevent.ProfileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := seuo.mutation.ProfileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledevent.ProfileTable,
+			Columns: []string{scheduledevent.ProfileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(profile.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

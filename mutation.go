@@ -17491,32 +17491,35 @@ func (m *PrinterMutation) ResetEdge(name string) error {
 // ProfileMutation represents an operation that mutates the Profile nodes in the graph.
 type ProfileMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	name          *string
-	apply_to_all  *bool
-	_type         *profile.Type
-	disabled      *bool
-	clearedFields map[string]struct{}
-	tags          map[int]struct{}
-	removedtags   map[int]struct{}
-	clearedtags   bool
-	tasks         map[int]struct{}
-	removedtasks  map[int]struct{}
-	clearedtasks  bool
-	issues        map[int]struct{}
-	removedissues map[int]struct{}
-	clearedissues bool
-	site          map[int]struct{}
-	removedsite   map[int]struct{}
-	clearedsite   bool
-	tenant        map[int]struct{}
-	removedtenant map[int]struct{}
-	clearedtenant bool
-	done          bool
-	oldValue      func(context.Context) (*Profile, error)
-	predicates    []predicate.Profile
+	op                      Op
+	typ                     string
+	id                      *int
+	name                    *string
+	apply_to_all            *bool
+	_type                   *profile.Type
+	disabled                *bool
+	clearedFields           map[string]struct{}
+	tags                    map[int]struct{}
+	removedtags             map[int]struct{}
+	clearedtags             bool
+	tasks                   map[int]struct{}
+	removedtasks            map[int]struct{}
+	clearedtasks            bool
+	issues                  map[int]struct{}
+	removedissues           map[int]struct{}
+	clearedissues           bool
+	scheduled_events        map[int]struct{}
+	removedscheduled_events map[int]struct{}
+	clearedscheduled_events bool
+	site                    map[int]struct{}
+	removedsite             map[int]struct{}
+	clearedsite             bool
+	tenant                  map[int]struct{}
+	removedtenant           map[int]struct{}
+	clearedtenant           bool
+	done                    bool
+	oldValue                func(context.Context) (*Profile, error)
+	predicates              []predicate.Profile
 }
 
 var _ ent.Mutation = (*ProfileMutation)(nil)
@@ -17936,6 +17939,60 @@ func (m *ProfileMutation) ResetIssues() {
 	m.removedissues = nil
 }
 
+// AddScheduledEventIDs adds the "scheduled_events" edge to the ScheduledEvent entity by ids.
+func (m *ProfileMutation) AddScheduledEventIDs(ids ...int) {
+	if m.scheduled_events == nil {
+		m.scheduled_events = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.scheduled_events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearScheduledEvents clears the "scheduled_events" edge to the ScheduledEvent entity.
+func (m *ProfileMutation) ClearScheduledEvents() {
+	m.clearedscheduled_events = true
+}
+
+// ScheduledEventsCleared reports if the "scheduled_events" edge to the ScheduledEvent entity was cleared.
+func (m *ProfileMutation) ScheduledEventsCleared() bool {
+	return m.clearedscheduled_events
+}
+
+// RemoveScheduledEventIDs removes the "scheduled_events" edge to the ScheduledEvent entity by IDs.
+func (m *ProfileMutation) RemoveScheduledEventIDs(ids ...int) {
+	if m.removedscheduled_events == nil {
+		m.removedscheduled_events = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.scheduled_events, ids[i])
+		m.removedscheduled_events[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedScheduledEvents returns the removed IDs of the "scheduled_events" edge to the ScheduledEvent entity.
+func (m *ProfileMutation) RemovedScheduledEventsIDs() (ids []int) {
+	for id := range m.removedscheduled_events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ScheduledEventsIDs returns the "scheduled_events" edge IDs in the mutation.
+func (m *ProfileMutation) ScheduledEventsIDs() (ids []int) {
+	for id := range m.scheduled_events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetScheduledEvents resets all changes to the "scheduled_events" edge.
+func (m *ProfileMutation) ResetScheduledEvents() {
+	m.scheduled_events = nil
+	m.clearedscheduled_events = false
+	m.removedscheduled_events = nil
+}
+
 // AddSiteIDs adds the "site" edge to the Site entity by ids.
 func (m *ProfileMutation) AddSiteIDs(ids ...int) {
 	if m.site == nil {
@@ -18237,7 +18294,7 @@ func (m *ProfileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProfileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.tags != nil {
 		edges = append(edges, profile.EdgeTags)
 	}
@@ -18246,6 +18303,9 @@ func (m *ProfileMutation) AddedEdges() []string {
 	}
 	if m.issues != nil {
 		edges = append(edges, profile.EdgeIssues)
+	}
+	if m.scheduled_events != nil {
+		edges = append(edges, profile.EdgeScheduledEvents)
 	}
 	if m.site != nil {
 		edges = append(edges, profile.EdgeSite)
@@ -18278,6 +18338,12 @@ func (m *ProfileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case profile.EdgeScheduledEvents:
+		ids := make([]ent.Value, 0, len(m.scheduled_events))
+		for id := range m.scheduled_events {
+			ids = append(ids, id)
+		}
+		return ids
 	case profile.EdgeSite:
 		ids := make([]ent.Value, 0, len(m.site))
 		for id := range m.site {
@@ -18296,7 +18362,7 @@ func (m *ProfileMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProfileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedtags != nil {
 		edges = append(edges, profile.EdgeTags)
 	}
@@ -18305,6 +18371,9 @@ func (m *ProfileMutation) RemovedEdges() []string {
 	}
 	if m.removedissues != nil {
 		edges = append(edges, profile.EdgeIssues)
+	}
+	if m.removedscheduled_events != nil {
+		edges = append(edges, profile.EdgeScheduledEvents)
 	}
 	if m.removedsite != nil {
 		edges = append(edges, profile.EdgeSite)
@@ -18337,6 +18406,12 @@ func (m *ProfileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case profile.EdgeScheduledEvents:
+		ids := make([]ent.Value, 0, len(m.removedscheduled_events))
+		for id := range m.removedscheduled_events {
+			ids = append(ids, id)
+		}
+		return ids
 	case profile.EdgeSite:
 		ids := make([]ent.Value, 0, len(m.removedsite))
 		for id := range m.removedsite {
@@ -18355,7 +18430,7 @@ func (m *ProfileMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProfileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedtags {
 		edges = append(edges, profile.EdgeTags)
 	}
@@ -18364,6 +18439,9 @@ func (m *ProfileMutation) ClearedEdges() []string {
 	}
 	if m.clearedissues {
 		edges = append(edges, profile.EdgeIssues)
+	}
+	if m.clearedscheduled_events {
+		edges = append(edges, profile.EdgeScheduledEvents)
 	}
 	if m.clearedsite {
 		edges = append(edges, profile.EdgeSite)
@@ -18384,6 +18462,8 @@ func (m *ProfileMutation) EdgeCleared(name string) bool {
 		return m.clearedtasks
 	case profile.EdgeIssues:
 		return m.clearedissues
+	case profile.EdgeScheduledEvents:
+		return m.clearedscheduled_events
 	case profile.EdgeSite:
 		return m.clearedsite
 	case profile.EdgeTenant:
@@ -18412,6 +18492,9 @@ func (m *ProfileMutation) ResetEdge(name string) error {
 		return nil
 	case profile.EdgeIssues:
 		m.ResetIssues()
+		return nil
+	case profile.EdgeScheduledEvents:
+		m.ResetScheduledEvents()
 		return nil
 	case profile.EdgeSite:
 		m.ResetSite()
@@ -22329,27 +22412,34 @@ func (m *RustdeskMutation) ResetEdge(name string) error {
 // ScheduledEventMutation represents an operation that mutates the ScheduledEvent nodes in the graph.
 type ScheduledEventMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	description     *string
-	_type           *string
-	cron            *string
-	when            *time.Time
-	enabled         *bool
-	last_run        *time.Time
-	last_run_failed *bool
-	last_result     *string
-	created_at      *time.Time
-	updated_at      *time.Time
-	clearedFields   map[string]struct{}
-	tenant          *int
-	clearedtenant   bool
-	site            *int
-	clearedsite     bool
-	done            bool
-	oldValue        func(context.Context) (*ScheduledEvent, error)
-	predicates      []predicate.ScheduledEvent
+	op                Op
+	typ               string
+	id                *int
+	description       *string
+	_type             *string
+	cron              *string
+	when              *time.Time
+	enabled           *bool
+	last_run          *time.Time
+	last_run_failed   *bool
+	last_result       *string
+	package_id        *string
+	package_name      *string
+	package_branch    *string
+	package_brew_type *string
+	package_verified  *bool
+	created_at        *time.Time
+	updated_at        *time.Time
+	clearedFields     map[string]struct{}
+	tenant            *int
+	clearedtenant     bool
+	site              *int
+	clearedsite       bool
+	profile           *int
+	clearedprofile    bool
+	done              bool
+	oldValue          func(context.Context) (*ScheduledEvent, error)
+	predicates        []predicate.ScheduledEvent
 }
 
 var _ ent.Mutation = (*ScheduledEventMutation)(nil)
@@ -22790,6 +22880,238 @@ func (m *ScheduledEventMutation) ResetLastResult() {
 	delete(m.clearedFields, scheduledevent.FieldLastResult)
 }
 
+// SetPackageID sets the "package_id" field.
+func (m *ScheduledEventMutation) SetPackageID(s string) {
+	m.package_id = &s
+}
+
+// PackageID returns the value of the "package_id" field in the mutation.
+func (m *ScheduledEventMutation) PackageID() (r string, exists bool) {
+	v := m.package_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageID returns the old "package_id" field's value of the ScheduledEvent entity.
+// If the ScheduledEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduledEventMutation) OldPackageID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageID: %w", err)
+	}
+	return oldValue.PackageID, nil
+}
+
+// ClearPackageID clears the value of the "package_id" field.
+func (m *ScheduledEventMutation) ClearPackageID() {
+	m.package_id = nil
+	m.clearedFields[scheduledevent.FieldPackageID] = struct{}{}
+}
+
+// PackageIDCleared returns if the "package_id" field was cleared in this mutation.
+func (m *ScheduledEventMutation) PackageIDCleared() bool {
+	_, ok := m.clearedFields[scheduledevent.FieldPackageID]
+	return ok
+}
+
+// ResetPackageID resets all changes to the "package_id" field.
+func (m *ScheduledEventMutation) ResetPackageID() {
+	m.package_id = nil
+	delete(m.clearedFields, scheduledevent.FieldPackageID)
+}
+
+// SetPackageName sets the "package_name" field.
+func (m *ScheduledEventMutation) SetPackageName(s string) {
+	m.package_name = &s
+}
+
+// PackageName returns the value of the "package_name" field in the mutation.
+func (m *ScheduledEventMutation) PackageName() (r string, exists bool) {
+	v := m.package_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageName returns the old "package_name" field's value of the ScheduledEvent entity.
+// If the ScheduledEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduledEventMutation) OldPackageName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageName: %w", err)
+	}
+	return oldValue.PackageName, nil
+}
+
+// ClearPackageName clears the value of the "package_name" field.
+func (m *ScheduledEventMutation) ClearPackageName() {
+	m.package_name = nil
+	m.clearedFields[scheduledevent.FieldPackageName] = struct{}{}
+}
+
+// PackageNameCleared returns if the "package_name" field was cleared in this mutation.
+func (m *ScheduledEventMutation) PackageNameCleared() bool {
+	_, ok := m.clearedFields[scheduledevent.FieldPackageName]
+	return ok
+}
+
+// ResetPackageName resets all changes to the "package_name" field.
+func (m *ScheduledEventMutation) ResetPackageName() {
+	m.package_name = nil
+	delete(m.clearedFields, scheduledevent.FieldPackageName)
+}
+
+// SetPackageBranch sets the "package_branch" field.
+func (m *ScheduledEventMutation) SetPackageBranch(s string) {
+	m.package_branch = &s
+}
+
+// PackageBranch returns the value of the "package_branch" field in the mutation.
+func (m *ScheduledEventMutation) PackageBranch() (r string, exists bool) {
+	v := m.package_branch
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageBranch returns the old "package_branch" field's value of the ScheduledEvent entity.
+// If the ScheduledEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduledEventMutation) OldPackageBranch(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageBranch is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageBranch requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageBranch: %w", err)
+	}
+	return oldValue.PackageBranch, nil
+}
+
+// ClearPackageBranch clears the value of the "package_branch" field.
+func (m *ScheduledEventMutation) ClearPackageBranch() {
+	m.package_branch = nil
+	m.clearedFields[scheduledevent.FieldPackageBranch] = struct{}{}
+}
+
+// PackageBranchCleared returns if the "package_branch" field was cleared in this mutation.
+func (m *ScheduledEventMutation) PackageBranchCleared() bool {
+	_, ok := m.clearedFields[scheduledevent.FieldPackageBranch]
+	return ok
+}
+
+// ResetPackageBranch resets all changes to the "package_branch" field.
+func (m *ScheduledEventMutation) ResetPackageBranch() {
+	m.package_branch = nil
+	delete(m.clearedFields, scheduledevent.FieldPackageBranch)
+}
+
+// SetPackageBrewType sets the "package_brew_type" field.
+func (m *ScheduledEventMutation) SetPackageBrewType(s string) {
+	m.package_brew_type = &s
+}
+
+// PackageBrewType returns the value of the "package_brew_type" field in the mutation.
+func (m *ScheduledEventMutation) PackageBrewType() (r string, exists bool) {
+	v := m.package_brew_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageBrewType returns the old "package_brew_type" field's value of the ScheduledEvent entity.
+// If the ScheduledEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduledEventMutation) OldPackageBrewType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageBrewType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageBrewType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageBrewType: %w", err)
+	}
+	return oldValue.PackageBrewType, nil
+}
+
+// ClearPackageBrewType clears the value of the "package_brew_type" field.
+func (m *ScheduledEventMutation) ClearPackageBrewType() {
+	m.package_brew_type = nil
+	m.clearedFields[scheduledevent.FieldPackageBrewType] = struct{}{}
+}
+
+// PackageBrewTypeCleared returns if the "package_brew_type" field was cleared in this mutation.
+func (m *ScheduledEventMutation) PackageBrewTypeCleared() bool {
+	_, ok := m.clearedFields[scheduledevent.FieldPackageBrewType]
+	return ok
+}
+
+// ResetPackageBrewType resets all changes to the "package_brew_type" field.
+func (m *ScheduledEventMutation) ResetPackageBrewType() {
+	m.package_brew_type = nil
+	delete(m.clearedFields, scheduledevent.FieldPackageBrewType)
+}
+
+// SetPackageVerified sets the "package_verified" field.
+func (m *ScheduledEventMutation) SetPackageVerified(b bool) {
+	m.package_verified = &b
+}
+
+// PackageVerified returns the value of the "package_verified" field in the mutation.
+func (m *ScheduledEventMutation) PackageVerified() (r bool, exists bool) {
+	v := m.package_verified
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPackageVerified returns the old "package_verified" field's value of the ScheduledEvent entity.
+// If the ScheduledEvent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScheduledEventMutation) OldPackageVerified(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPackageVerified is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPackageVerified requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPackageVerified: %w", err)
+	}
+	return oldValue.PackageVerified, nil
+}
+
+// ResetPackageVerified resets all changes to the "package_verified" field.
+func (m *ScheduledEventMutation) ResetPackageVerified() {
+	m.package_verified = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *ScheduledEventMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -22953,6 +23275,45 @@ func (m *ScheduledEventMutation) ResetSite() {
 	m.clearedsite = false
 }
 
+// SetProfileID sets the "profile" edge to the Profile entity by id.
+func (m *ScheduledEventMutation) SetProfileID(id int) {
+	m.profile = &id
+}
+
+// ClearProfile clears the "profile" edge to the Profile entity.
+func (m *ScheduledEventMutation) ClearProfile() {
+	m.clearedprofile = true
+}
+
+// ProfileCleared reports if the "profile" edge to the Profile entity was cleared.
+func (m *ScheduledEventMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// ProfileID returns the "profile" edge ID in the mutation.
+func (m *ScheduledEventMutation) ProfileID() (id int, exists bool) {
+	if m.profile != nil {
+		return *m.profile, true
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProfileID instead. It exists only for internal usage by the builders.
+func (m *ScheduledEventMutation) ProfileIDs() (ids []int) {
+	if id := m.profile; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *ScheduledEventMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+}
+
 // Where appends a list predicates to the ScheduledEventMutation builder.
 func (m *ScheduledEventMutation) Where(ps ...predicate.ScheduledEvent) {
 	m.predicates = append(m.predicates, ps...)
@@ -22987,7 +23348,7 @@ func (m *ScheduledEventMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScheduledEventMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 15)
 	if m.description != nil {
 		fields = append(fields, scheduledevent.FieldDescription)
 	}
@@ -23011,6 +23372,21 @@ func (m *ScheduledEventMutation) Fields() []string {
 	}
 	if m.last_result != nil {
 		fields = append(fields, scheduledevent.FieldLastResult)
+	}
+	if m.package_id != nil {
+		fields = append(fields, scheduledevent.FieldPackageID)
+	}
+	if m.package_name != nil {
+		fields = append(fields, scheduledevent.FieldPackageName)
+	}
+	if m.package_branch != nil {
+		fields = append(fields, scheduledevent.FieldPackageBranch)
+	}
+	if m.package_brew_type != nil {
+		fields = append(fields, scheduledevent.FieldPackageBrewType)
+	}
+	if m.package_verified != nil {
+		fields = append(fields, scheduledevent.FieldPackageVerified)
 	}
 	if m.created_at != nil {
 		fields = append(fields, scheduledevent.FieldCreatedAt)
@@ -23042,6 +23418,16 @@ func (m *ScheduledEventMutation) Field(name string) (ent.Value, bool) {
 		return m.LastRunFailed()
 	case scheduledevent.FieldLastResult:
 		return m.LastResult()
+	case scheduledevent.FieldPackageID:
+		return m.PackageID()
+	case scheduledevent.FieldPackageName:
+		return m.PackageName()
+	case scheduledevent.FieldPackageBranch:
+		return m.PackageBranch()
+	case scheduledevent.FieldPackageBrewType:
+		return m.PackageBrewType()
+	case scheduledevent.FieldPackageVerified:
+		return m.PackageVerified()
 	case scheduledevent.FieldCreatedAt:
 		return m.CreatedAt()
 	case scheduledevent.FieldUpdatedAt:
@@ -23071,6 +23457,16 @@ func (m *ScheduledEventMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldLastRunFailed(ctx)
 	case scheduledevent.FieldLastResult:
 		return m.OldLastResult(ctx)
+	case scheduledevent.FieldPackageID:
+		return m.OldPackageID(ctx)
+	case scheduledevent.FieldPackageName:
+		return m.OldPackageName(ctx)
+	case scheduledevent.FieldPackageBranch:
+		return m.OldPackageBranch(ctx)
+	case scheduledevent.FieldPackageBrewType:
+		return m.OldPackageBrewType(ctx)
+	case scheduledevent.FieldPackageVerified:
+		return m.OldPackageVerified(ctx)
 	case scheduledevent.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case scheduledevent.FieldUpdatedAt:
@@ -23140,6 +23536,41 @@ func (m *ScheduledEventMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLastResult(v)
 		return nil
+	case scheduledevent.FieldPackageID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageID(v)
+		return nil
+	case scheduledevent.FieldPackageName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageName(v)
+		return nil
+	case scheduledevent.FieldPackageBranch:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageBranch(v)
+		return nil
+	case scheduledevent.FieldPackageBrewType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageBrewType(v)
+		return nil
+	case scheduledevent.FieldPackageVerified:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPackageVerified(v)
+		return nil
 	case scheduledevent.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -23196,6 +23627,18 @@ func (m *ScheduledEventMutation) ClearedFields() []string {
 	if m.FieldCleared(scheduledevent.FieldLastResult) {
 		fields = append(fields, scheduledevent.FieldLastResult)
 	}
+	if m.FieldCleared(scheduledevent.FieldPackageID) {
+		fields = append(fields, scheduledevent.FieldPackageID)
+	}
+	if m.FieldCleared(scheduledevent.FieldPackageName) {
+		fields = append(fields, scheduledevent.FieldPackageName)
+	}
+	if m.FieldCleared(scheduledevent.FieldPackageBranch) {
+		fields = append(fields, scheduledevent.FieldPackageBranch)
+	}
+	if m.FieldCleared(scheduledevent.FieldPackageBrewType) {
+		fields = append(fields, scheduledevent.FieldPackageBrewType)
+	}
 	if m.FieldCleared(scheduledevent.FieldUpdatedAt) {
 		fields = append(fields, scheduledevent.FieldUpdatedAt)
 	}
@@ -23224,6 +23667,18 @@ func (m *ScheduledEventMutation) ClearField(name string) error {
 		return nil
 	case scheduledevent.FieldLastResult:
 		m.ClearLastResult()
+		return nil
+	case scheduledevent.FieldPackageID:
+		m.ClearPackageID()
+		return nil
+	case scheduledevent.FieldPackageName:
+		m.ClearPackageName()
+		return nil
+	case scheduledevent.FieldPackageBranch:
+		m.ClearPackageBranch()
+		return nil
+	case scheduledevent.FieldPackageBrewType:
+		m.ClearPackageBrewType()
 		return nil
 	case scheduledevent.FieldUpdatedAt:
 		m.ClearUpdatedAt()
@@ -23260,6 +23715,21 @@ func (m *ScheduledEventMutation) ResetField(name string) error {
 	case scheduledevent.FieldLastResult:
 		m.ResetLastResult()
 		return nil
+	case scheduledevent.FieldPackageID:
+		m.ResetPackageID()
+		return nil
+	case scheduledevent.FieldPackageName:
+		m.ResetPackageName()
+		return nil
+	case scheduledevent.FieldPackageBranch:
+		m.ResetPackageBranch()
+		return nil
+	case scheduledevent.FieldPackageBrewType:
+		m.ResetPackageBrewType()
+		return nil
+	case scheduledevent.FieldPackageVerified:
+		m.ResetPackageVerified()
+		return nil
 	case scheduledevent.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
@@ -23272,12 +23742,15 @@ func (m *ScheduledEventMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ScheduledEventMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.tenant != nil {
 		edges = append(edges, scheduledevent.EdgeTenant)
 	}
 	if m.site != nil {
 		edges = append(edges, scheduledevent.EdgeSite)
+	}
+	if m.profile != nil {
+		edges = append(edges, scheduledevent.EdgeProfile)
 	}
 	return edges
 }
@@ -23294,13 +23767,17 @@ func (m *ScheduledEventMutation) AddedIDs(name string) []ent.Value {
 		if id := m.site; id != nil {
 			return []ent.Value{*id}
 		}
+	case scheduledevent.EdgeProfile:
+		if id := m.profile; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ScheduledEventMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	return edges
 }
 
@@ -23312,12 +23789,15 @@ func (m *ScheduledEventMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ScheduledEventMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedtenant {
 		edges = append(edges, scheduledevent.EdgeTenant)
 	}
 	if m.clearedsite {
 		edges = append(edges, scheduledevent.EdgeSite)
+	}
+	if m.clearedprofile {
+		edges = append(edges, scheduledevent.EdgeProfile)
 	}
 	return edges
 }
@@ -23330,6 +23810,8 @@ func (m *ScheduledEventMutation) EdgeCleared(name string) bool {
 		return m.clearedtenant
 	case scheduledevent.EdgeSite:
 		return m.clearedsite
+	case scheduledevent.EdgeProfile:
+		return m.clearedprofile
 	}
 	return false
 }
@@ -23344,6 +23826,9 @@ func (m *ScheduledEventMutation) ClearEdge(name string) error {
 	case scheduledevent.EdgeSite:
 		m.ClearSite()
 		return nil
+	case scheduledevent.EdgeProfile:
+		m.ClearProfile()
+		return nil
 	}
 	return fmt.Errorf("unknown ScheduledEvent unique edge %s", name)
 }
@@ -23357,6 +23842,9 @@ func (m *ScheduledEventMutation) ResetEdge(name string) error {
 		return nil
 	case scheduledevent.EdgeSite:
 		m.ResetSite()
+		return nil
+	case scheduledevent.EdgeProfile:
+		m.ResetProfile()
 		return nil
 	}
 	return fmt.Errorf("unknown ScheduledEvent edge %s", name)

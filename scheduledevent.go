@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/open-uem/ent/profile"
 	"github.com/open-uem/ent/scheduledevent"
 	"github.com/open-uem/ent/site"
 	"github.com/open-uem/ent/tenant"
@@ -35,16 +36,27 @@ type ScheduledEvent struct {
 	LastRunFailed bool `json:"last_run_failed,omitempty"`
 	// LastResult holds the value of the "last_result" field.
 	LastResult string `json:"last_result,omitempty"`
+	// PackageID holds the value of the "package_id" field.
+	PackageID string `json:"package_id,omitempty"`
+	// PackageName holds the value of the "package_name" field.
+	PackageName string `json:"package_name,omitempty"`
+	// PackageBranch holds the value of the "package_branch" field.
+	PackageBranch string `json:"package_branch,omitempty"`
+	// PackageBrewType holds the value of the "package_brew_type" field.
+	PackageBrewType string `json:"package_brew_type,omitempty"`
+	// PackageVerified holds the value of the "package_verified" field.
+	PackageVerified bool `json:"package_verified,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduledEventQuery when eager-loading is set.
-	Edges                   ScheduledEventEdges `json:"edges"`
-	site_scheduled_events   *int
-	tenant_scheduled_events *int
-	selectValues            sql.SelectValues
+	Edges                    ScheduledEventEdges `json:"edges"`
+	profile_scheduled_events *int
+	site_scheduled_events    *int
+	tenant_scheduled_events  *int
+	selectValues             sql.SelectValues
 }
 
 // ScheduledEventEdges holds the relations/edges for other nodes in the graph.
@@ -53,9 +65,11 @@ type ScheduledEventEdges struct {
 	Tenant *Tenant `json:"tenant,omitempty"`
 	// Site holds the value of the site edge.
 	Site *Site `json:"site,omitempty"`
+	// Profile holds the value of the profile edge.
+	Profile *Profile `json:"profile,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
 // TenantOrErr returns the Tenant value or an error if the edge
@@ -80,22 +94,35 @@ func (e ScheduledEventEdges) SiteOrErr() (*Site, error) {
 	return nil, &NotLoadedError{edge: "site"}
 }
 
+// ProfileOrErr returns the Profile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScheduledEventEdges) ProfileOrErr() (*Profile, error) {
+	if e.Profile != nil {
+		return e.Profile, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: profile.Label}
+	}
+	return nil, &NotLoadedError{edge: "profile"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ScheduledEvent) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case scheduledevent.FieldEnabled, scheduledevent.FieldLastRunFailed:
+		case scheduledevent.FieldEnabled, scheduledevent.FieldLastRunFailed, scheduledevent.FieldPackageVerified:
 			values[i] = new(sql.NullBool)
 		case scheduledevent.FieldID:
 			values[i] = new(sql.NullInt64)
-		case scheduledevent.FieldDescription, scheduledevent.FieldType, scheduledevent.FieldCron, scheduledevent.FieldLastResult:
+		case scheduledevent.FieldDescription, scheduledevent.FieldType, scheduledevent.FieldCron, scheduledevent.FieldLastResult, scheduledevent.FieldPackageID, scheduledevent.FieldPackageName, scheduledevent.FieldPackageBranch, scheduledevent.FieldPackageBrewType:
 			values[i] = new(sql.NullString)
 		case scheduledevent.FieldWhen, scheduledevent.FieldLastRun, scheduledevent.FieldCreatedAt, scheduledevent.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case scheduledevent.ForeignKeys[0]: // site_scheduled_events
+		case scheduledevent.ForeignKeys[0]: // profile_scheduled_events
 			values[i] = new(sql.NullInt64)
-		case scheduledevent.ForeignKeys[1]: // tenant_scheduled_events
+		case scheduledevent.ForeignKeys[1]: // site_scheduled_events
+			values[i] = new(sql.NullInt64)
+		case scheduledevent.ForeignKeys[2]: // tenant_scheduled_events
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -168,6 +195,36 @@ func (se *ScheduledEvent) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				se.LastResult = value.String
 			}
+		case scheduledevent.FieldPackageID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field package_id", values[i])
+			} else if value.Valid {
+				se.PackageID = value.String
+			}
+		case scheduledevent.FieldPackageName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field package_name", values[i])
+			} else if value.Valid {
+				se.PackageName = value.String
+			}
+		case scheduledevent.FieldPackageBranch:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field package_branch", values[i])
+			} else if value.Valid {
+				se.PackageBranch = value.String
+			}
+		case scheduledevent.FieldPackageBrewType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field package_brew_type", values[i])
+			} else if value.Valid {
+				se.PackageBrewType = value.String
+			}
+		case scheduledevent.FieldPackageVerified:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field package_verified", values[i])
+			} else if value.Valid {
+				se.PackageVerified = value.Bool
+			}
 		case scheduledevent.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -183,12 +240,19 @@ func (se *ScheduledEvent) assignValues(columns []string, values []any) error {
 			}
 		case scheduledevent.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field profile_scheduled_events", value)
+			} else if value.Valid {
+				se.profile_scheduled_events = new(int)
+				*se.profile_scheduled_events = int(value.Int64)
+			}
+		case scheduledevent.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field site_scheduled_events", value)
 			} else if value.Valid {
 				se.site_scheduled_events = new(int)
 				*se.site_scheduled_events = int(value.Int64)
 			}
-		case scheduledevent.ForeignKeys[1]:
+		case scheduledevent.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field tenant_scheduled_events", value)
 			} else if value.Valid {
@@ -216,6 +280,11 @@ func (se *ScheduledEvent) QueryTenant() *TenantQuery {
 // QuerySite queries the "site" edge of the ScheduledEvent entity.
 func (se *ScheduledEvent) QuerySite() *SiteQuery {
 	return NewScheduledEventClient(se.config).QuerySite(se)
+}
+
+// QueryProfile queries the "profile" edge of the ScheduledEvent entity.
+func (se *ScheduledEvent) QueryProfile() *ProfileQuery {
+	return NewScheduledEventClient(se.config).QueryProfile(se)
 }
 
 // Update returns a builder for updating this ScheduledEvent.
@@ -268,6 +337,21 @@ func (se *ScheduledEvent) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("last_result=")
 	builder.WriteString(se.LastResult)
+	builder.WriteString(", ")
+	builder.WriteString("package_id=")
+	builder.WriteString(se.PackageID)
+	builder.WriteString(", ")
+	builder.WriteString("package_name=")
+	builder.WriteString(se.PackageName)
+	builder.WriteString(", ")
+	builder.WriteString("package_branch=")
+	builder.WriteString(se.PackageBranch)
+	builder.WriteString(", ")
+	builder.WriteString("package_brew_type=")
+	builder.WriteString(se.PackageBrewType)
+	builder.WriteString(", ")
+	builder.WriteString("package_verified=")
+	builder.WriteString(fmt.Sprintf("%v", se.PackageVerified))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(se.CreatedAt.Format(time.ANSIC))

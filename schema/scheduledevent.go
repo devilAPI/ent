@@ -30,6 +30,14 @@ func (ScheduledEvent) Fields() []ent.Field {
 		field.Time("last_run").Optional().Nillable(),
 		field.Bool("last_run_failed").Default(false),
 		field.String("last_result").Optional(),
+		// PackageID, PackageName, PackageBranch, PackageBrewType and PackageVerified
+		// define the software package an installpackage or updatepackage event
+		// deploys to the computers of its organization (or site)
+		field.String("package_id").Optional(),
+		field.String("package_name").Optional(),
+		field.String("package_branch").Optional(),
+		field.String("package_brew_type").Optional(),
+		field.Bool("package_verified").Default(false),
 		field.Time("created_at").Default(time.Now()),
 		field.Time("updated_at").Optional().Nillable(),
 	}
@@ -41,5 +49,7 @@ func (ScheduledEvent) Edges() []ent.Edge {
 		edge.From("tenant", Tenant.Type).Ref("scheduled_events").Unique().Required(),
 		// An event without a site applies to every site of its organization
 		edge.From("site", Site.Type).Ref("scheduled_events").Unique(),
+		// The profile whose tasks a runprofile event asks the agents to run
+		edge.From("profile", Profile.Type).Ref("scheduled_events").Unique(),
 	}
 }

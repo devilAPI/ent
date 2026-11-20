@@ -3680,6 +3680,22 @@ func (c *ProfileClient) QueryIssues(pr *Profile) *ProfileIssueQuery {
 	return query
 }
 
+// QueryScheduledEvents queries the scheduled_events edge of a Profile.
+func (c *ProfileClient) QueryScheduledEvents(pr *Profile) *ScheduledEventQuery {
+	query := (&ScheduledEventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(profile.Table, profile.FieldID, id),
+			sqlgraph.To(scheduledevent.Table, scheduledevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, profile.ScheduledEventsTable, profile.ScheduledEventsColumn),
+		)
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QuerySite queries the site edge of a Profile.
 func (c *ProfileClient) QuerySite(pr *Profile) *SiteQuery {
 	query := (&SiteClient{config: c.config}).Query()
@@ -4631,6 +4647,22 @@ func (c *ScheduledEventClient) QuerySite(se *ScheduledEvent) *SiteQuery {
 			sqlgraph.From(scheduledevent.Table, scheduledevent.FieldID, id),
 			sqlgraph.To(site.Table, site.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scheduledevent.SiteTable, scheduledevent.SiteColumn),
+		)
+		fromV = sqlgraph.Neighbors(se.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProfile queries the profile edge of a ScheduledEvent.
+func (c *ScheduledEventClient) QueryProfile(se *ScheduledEvent) *ProfileQuery {
+	query := (&ProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := se.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledevent.Table, scheduledevent.FieldID, id),
+			sqlgraph.To(profile.Table, profile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, scheduledevent.ProfileTable, scheduledevent.ProfileColumn),
 		)
 		fromV = sqlgraph.Neighbors(se.driver.Dialect(), step)
 		return fromV, nil
